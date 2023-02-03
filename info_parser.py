@@ -15,7 +15,7 @@ def parse_info():
     for row in rows:
         result.append(row.text.strip())
 
-    return [result[x:x + 3] for x in range(0, len(result), 3)]
+    return [result[x : x + 3] for x in range(0, len(result), 3)]
 
 
 def get_data():
@@ -42,6 +42,6 @@ def get_results(time=None):
             pandas.read_csv("data.csv")
             .sort_values(by=["time", "name", "url"], ascending=False)["name"]
             .value_counts()[:3]
-            .index.tolist()
+            .to_frame()
         )
-        print("Топ 3 наиболее атакуемых брендов ==", df)
+        print("Топ 3 наиболее атакуемых брендов:", "\n", df)
