@@ -24,7 +24,7 @@ def get_data():
         for attack_data in attack:
             with open("data.csv", "r") as read_csv:
                 reader = csv.reader(read_csv, delimiter=",", quotechar='"')
-                if attack_data in list(reader):
+                if attack_data in list(reader):  # проверка уникальности
                     attack.remove(attack_data)
                 else:
                     with open("data.csv", "a", newline="") as write_csv:
@@ -35,9 +35,20 @@ def get_data():
 def get_results(time=None):
     with open("data.csv", "r") as read_csv:
         reader = csv.reader(read_csv, delimiter=",", quotechar='"')
-        print("Время начала парсинга ==", time)
-        print("Время окончания парсинга ==", datetime.datetime.now())
-        print("Количество уникальных URL ==", len(list(reader)) - 1)
+        print(
+            "Время начала парсинга ==",
+            datetime.datetime.strptime(str(time)[0:19], "%Y-%m-%d %H:%M:%S"),
+        )
+        print(
+            "Время окончания парсинга ==",
+            datetime.datetime.strptime(
+                str(datetime.datetime.now())[0:19], "%Y-%m-%d %H:%M:%S"
+            ),
+        )
+        print(
+            "Количество уникальных URL ==",
+            len(pandas.read_csv("data.csv").drop_duplicates()),
+        )  # дополнительная проверка уникальности
         df = (
             pandas.read_csv("data.csv")
             .sort_values(by=["time", "name", "url"], ascending=False)["name"]
